@@ -56,7 +56,7 @@ public class MoveToPointInspector2 : Editor
         if (GUILayout.Button("Reset"))
         {
             //float step = cube.speed * Time.deltaTime;
-            cube.gameObject.transform.position = cube.A.position;
+            cube.gameObject.transform.position = cube.Points[0].transform.position;
             cube.speed = 0;
             goToIndex = 0;
         }
