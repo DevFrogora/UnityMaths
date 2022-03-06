@@ -1,0 +1,4 @@
+Third bug
+03-03-2022 14:29:35
+Assets/Scenes/CustomInspector.unity
+This is our third bug

@@ -1,0 +1,4 @@
+First Bug
+03-03-2022 14:01:04
+Assets/Scenes/CustomInspector.unity
+This is our First bug
