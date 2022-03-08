@@ -21,7 +21,7 @@ public class MoveCircularInspector : Editor
         serializedObject.Update();
 
         EditorGUILayout.BeginVertical();
-        EditorGUILayout.LabelField("Circular Motion");
+        EditorGUILayout.LabelField("Circular Motion ");
 
 
         //cube.speed = EditorGUILayout.Slider("increase for delay", (2 * Mathf.PI) / cube.speed, 0, 20);
@@ -31,6 +31,9 @@ public class MoveCircularInspector : Editor
         cube.y = EditorGUILayout.FloatField("y ", cube.y);
         cube.z = EditorGUILayout.FloatField("z ", cube.z);
         cube.speed = EditorGUILayout.Slider("speed ",  cube.speed,0,20);
+        EditorGUILayout.HelpBox("Increase speed to make cube move",MessageType.Info);
+
+
         cube.width = EditorGUILayout.Slider("width", cube.width, 0, 20);
         cube.height = EditorGUILayout.Slider("height ", cube.height, 0, 20);
 
