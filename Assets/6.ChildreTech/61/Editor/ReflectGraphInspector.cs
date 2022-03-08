@@ -99,7 +99,6 @@ public class ReflectGraphInspector : Editor
         else
         {
             y[currentIndex] = MySin(angle[currentIndex]);
-
             // Mathf.Sin(timeCounter) -- in y axis;
             if (shiftGraphDirection == ShiftDirection.None)
             {
@@ -122,7 +121,7 @@ public class ReflectGraphInspector : Editor
         degree = (int)(timeCounter * Mathf.Rad2Deg);
         if (degree % 90f == 0)
         {
-            Debug.Log("WE hit  " + (int)degree);
+            //Debug.Log("WE hit  " + (int)degree);
             if (degree == 0)
             {
                 currentIndex = 1;
