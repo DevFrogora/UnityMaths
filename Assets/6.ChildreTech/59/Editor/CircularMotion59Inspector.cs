@@ -20,7 +20,7 @@ public class CircularMotion59Inspector : Editor
     }
     int currentIndex;
     int degree;
-
+    //float  shiftGraph;
     public override void OnInspectorGUI()
     {
         timeCounter += speed * Time.deltaTime;
@@ -69,6 +69,9 @@ public class CircularMotion59Inspector : Editor
             }
         }
 
+        #endregion
+
+        //shiftGraph = EditorGUILayout.Slider("shiftGraph", shiftGraph, 0, 10);
         if (GUILayout.Button("Reset"))
         {
 
@@ -76,8 +79,9 @@ public class CircularMotion59Inspector : Editor
             speed = 0;
             cube.transform.position = new Vector3(0, y[0], Mathf.Cos(angle[currentIndex]));
             timeCounter = 0;
+            //shiftGraph = 0;
         }
-        #endregion
+
 
     }
 
@@ -89,7 +93,9 @@ public class CircularMotion59Inspector : Editor
     private void OnSceneGUI()
     {
         for(int i = 0; i < angle.Length -1; i++)
-        Handles.DrawLine(new Vector3(0, y[i], Mathf.Cos(angle[i])), new Vector3(0, y[i+1], Mathf.Cos(angle[i+1])));
+            Handles.DrawLine(new Vector3(0, y[i], Mathf.Cos(angle[i])), new Vector3(0, y[i + 1], Mathf.Cos(angle[i + 1])));  // for circular motion
+
+        //Handles.DrawLine(new Vector3(0, y[i], Mathf.Cos(angle[i])+shiftGraph), new Vector3(0, y[i + 1] , Mathf.Cos(angle[i + 1]) + shiftGraph)); // for shift graph
 
         //Handles.DrawLine(new Vector3(0, y[i], angle[i]), new Vector3(0, y[i+1],angle[i+1])); // only sin func
 
