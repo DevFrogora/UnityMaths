@@ -19,17 +19,26 @@ public class ChildreTech63Inspector : Editor
     //float  shiftGraph;
     public override void OnInspectorGUI()
     {
+
+        EditorGUILayout.BeginHorizontal();
         if (GUILayout.Button("calculate distance"))
         {
             Debug.Log("distance :  "+GetLength(0,0,cube.transform.position.z, cube.transform.position.y));
-            Debug.Log("Angle  :  "+GetAngle(0, 0, cube.transform.position.z, cube.transform.position.y));
+            
         }
+        if (GUILayout.Button("calculate Angle"))
+        {
+            Debug.Log("Angle  :  " + GetAngle(0, 0, cube.transform.position.z, cube.transform.position.y));
+
+        }
+
+        EditorGUILayout.EndHorizontal();
     }
 
     private void OnSceneGUI()
     {
-
-            Handles.DrawLine(new Vector3(0,0 ,0) , new Vector3(0, cube.transform.position.y, cube.transform.position.z));  // for circular motion
+        Handles.color = Color.blue;
+        Handles.DrawLine(new Vector3(0,0 ,0) , new Vector3(0, cube.transform.position.y, cube.transform.position.z));  // for circular motion
     }
 
 
