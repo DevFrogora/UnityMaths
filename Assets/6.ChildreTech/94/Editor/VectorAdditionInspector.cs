@@ -36,10 +36,24 @@ public class VectorAdditionInspector : Editor
         var radius = 1;
         var angle = degree;
 
+
+        /// <summary>
+        /// when we add one vector to another vector , then the resultant vector will be move  forward 
+        /// </summary>
         cube.capsule.transform.position = AddVector(cube.transform.position,
                                             cube.anotherVector.transform.position);
 
-        
+        /// <summary>
+        /// when we sub  one vector to another vector , then the resultant vector will be move backward 
+        /// </summary>
+
+        //cube.capsule.transform.position = SubVector(cube.transform.position,
+        //                                    cube.anotherVector.transform.position);
+
+
+
+
+
         Handles.Label(cube.capsule.transform.position + (3 * Vector3.one), "resultant Length : " + cube.capsule.transform.position.magnitude);
         Handles.DrawLine(Vector3.zero, cube.capsule.transform.position);
 
@@ -59,5 +73,10 @@ public class VectorAdditionInspector : Editor
     Vector3 AddVector(Vector3 a , Vector3 b)
     {
         return new Vector3(a.x + b.x, a.y + b.y, a.z + b.z);
+    }
+
+    Vector3 SubVector(Vector3 a, Vector3 b)
+    {
+        return new Vector3(a.x - b.x, a.y - b.y, a.z - b.z);
     }
 }
