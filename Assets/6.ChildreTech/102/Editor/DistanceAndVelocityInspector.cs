@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-[CustomEditor(typeof(VectorVelocity))]
-public class VectorVelocityInspector : Editor
+[CustomEditor(typeof(DistanceAndVelocity))]
+public class DistanceAndVelocityInspector : Editor
 {
-    VectorVelocity cube;
+    DistanceAndVelocity cube;
     Vector3 direction;
     bool showVelocity;
     bool sceneRepaintAll;
@@ -18,7 +18,7 @@ public class VectorVelocityInspector : Editor
     public float jumpForce = 0;
     private void OnEnable()
     {
-        cube = (VectorVelocity)target;
+        cube = (DistanceAndVelocity)target;
     }
 
     public override void OnInspectorGUI()
@@ -56,7 +56,7 @@ public class VectorVelocityInspector : Editor
     {
         if (sceneRepaintAll)
         {
-            //StepPhysics();
+            StepPhysics();
             SceneView.RepaintAll();
         }
         Handles.color = Color.blue;
@@ -73,7 +73,7 @@ public class VectorVelocityInspector : Editor
                         velocity = slideVelocity;
                         wasdBool[0] = true;
                     }
-                    else if(Event.current.keyCode == (KeyCode.A))
+                    else if (Event.current.keyCode == (KeyCode.A))
                     {
                         direction = Vector3.left;
                         velocity = slideVelocity;
@@ -97,7 +97,8 @@ public class VectorVelocityInspector : Editor
                     {
                         jumpForce = 5;
                     }
-                    else {
+                    else
+                    {
                     }
 
                     break;
@@ -140,46 +141,30 @@ public class VectorVelocityInspector : Editor
                     break;
                 }
         }
+        if(Input.GetKeyDown(KeyCode.W))
+        {
+            Debug.Log("You pressed W");
+        }
         cube.transform.Translate(new Vector3(0, jumpForce, 0) * Time.deltaTime);
         jumpForce = 0;
         Handles.Label(cube.transform.position + (2 * Vector3.one), "Velocity: " + velocity);
-        Handles.Label(cube.transform.position + (2 * new Vector3(1,0,1)), "Disatance: " + cube.transform.position.magnitude);
+        Handles.Label(cube.transform.position + (2 * new Vector3(1, 0, 1)), "Disatance: " + cube.transform.position.magnitude);
 
 
         cube.transform.position += direction * velocity * Time.deltaTime;
 
-
-        //if (Input.GetKeyDown(KeyCode.W))
-        //{
-        //    direction = Vector3.forward;
-        //    Debug.Log("W");
-
-        //}
-        //if (Input.GetKeyDown(KeyCode.S))
-        //{
-        //    direction = -Vector3.forward;
-        //}
-        //if (Input.GetKeyDown(KeyCode.A))
-        //{
-        //    direction = Vector3.left;
-        //}
-        //if (Input.GetKeyDown(KeyCode.S))
-        //{
-        //    direction = Vector3.right;
-        //}
     }
 
     int countWASDBool()
     {
-        int count= 0;
+        int count = 0;
         for (int i = 0; i < wasdBool.Length; i++)
         {
-            if(wasdBool[i] == true)
+            if (wasdBool[i] == true)
             {
                 count++;
             }
         }
         return count;
     }
-
 }
