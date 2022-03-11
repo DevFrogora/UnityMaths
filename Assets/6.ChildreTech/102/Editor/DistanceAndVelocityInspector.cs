@@ -14,11 +14,16 @@ public class DistanceAndVelocityInspector : Editor
     float velocity = 0;
     bool[] wasdBool = new bool[4];
 
-
+    public float slideJumpForce = 0;
     public float jumpForce = 0;
+    public float leftForce = 0;
+    public float forwardForce = 0;
+
+    public GameObject Enemy;
     private void OnEnable()
     {
         cube = (DistanceAndVelocity)target;
+        Enemy = GameObject.Find("Enemy");
     }
 
     public override void OnInspectorGUI()
@@ -29,10 +34,13 @@ public class DistanceAndVelocityInspector : Editor
             cube.transform.position = Vector3.zero;
             direction = Vector3.zero;
             slideVelocity = 0;
+            jumpForce = 0;
 
         }
         slideVelocity = EditorGUILayout.Slider("velocity ", slideVelocity, 0, 5);
+        slideJumpForce = EditorGUILayout.Slider("jumpForce  ", slideJumpForce, 0, 20);
         sceneRepaintAll = EditorGUILayout.Toggle("SceneView Repaint ", sceneRepaintAll);
+        Enemy = (GameObject) EditorGUILayout.ObjectField("Enemy ", Enemy,  typeof(GameObject),true);
 
         //showVelocity = EditorGUILayout.Foldout(showVelocity, "Velocity direction");
         if (GUILayout.Button("Run Physics"))
@@ -95,7 +103,13 @@ public class DistanceAndVelocityInspector : Editor
                     }
                     else if (Event.current.keyCode == (KeyCode.Space))
                     {
-                        jumpForce = 5;
+                        jumpForce = slideJumpForce;
+                        if (wasdBool[0]) forwardForce = 2;
+                        if (wasdBool[1]) leftForce = -2;
+                        if (wasdBool[2]) forwardForce = -2;
+                        if (wasdBool[3]) leftForce = 2;
+
+
                     }
                     else
                     {
@@ -141,13 +155,13 @@ public class DistanceAndVelocityInspector : Editor
                     break;
                 }
         }
-        if(Input.GetKeyDown(KeyCode.W))
-        {
-            Debug.Log("You pressed W");
-        }
-        cube.transform.Translate(new Vector3(0, jumpForce, 0) * Time.deltaTime);
+
+        cube.rb.AddForce(new Vector3(leftForce, jumpForce, forwardForce), ForceMode.Impulse);
+        leftForce = 0;
+        forwardForce = 0;
         jumpForce = 0;
         Handles.Label(cube.transform.position + (2 * Vector3.one), "Velocity: " + velocity);
+        Handles.Label(Enemy.transform.position + (2 * Vector3.up), "Enemy ");
         Handles.Label(cube.transform.position + (2 * new Vector3(1, 0, 1)), "Disatance: " + cube.transform.position.magnitude);
 
 
@@ -167,4 +181,6 @@ public class DistanceAndVelocityInspector : Editor
         }
         return count;
     }
+
+    
 }
