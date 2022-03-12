@@ -19,11 +19,16 @@ public class DistanceAndVelocityInspector : Editor
     public float leftForce = 0;
     public float forwardForce = 0;
 
+    Enemy102 enemyComponentScript;
+    Vector3 enemyMoveDirec;
+    Vector3 enemyToPlayerDistance;
+
     public GameObject Enemy;
     private void OnEnable()
     {
         cube = (DistanceAndVelocity)target;
         Enemy = GameObject.Find("Enemy");
+        enemyComponentScript = Enemy.GetComponent<Enemy102>();
     }
 
     public override void OnInspectorGUI()
@@ -33,7 +38,6 @@ public class DistanceAndVelocityInspector : Editor
         {
             cube.transform.position = Vector3.zero;
             direction = Vector3.zero;
-            slideVelocity = 0;
             jumpForce = 0;
 
         }
@@ -163,10 +167,19 @@ public class DistanceAndVelocityInspector : Editor
         Handles.Label(cube.transform.position + (2 * Vector3.one), "Velocity: " + velocity);
         Handles.Label(Enemy.transform.position + (2 * Vector3.up), "Enemy ");
         Handles.Label(cube.transform.position + (2 * new Vector3(1, 0, 1)), "Disatance: " + cube.transform.position.magnitude);
-
-
+        
         cube.transform.position += direction * velocity * Time.deltaTime;
 
+        enemyMoveDirec = Vector3.zero;
+        enemyToPlayerDistance = cube.transform.position - Enemy.transform.position;
+        if (enemyToPlayerDistance.magnitude < enemyComponentScript.detectionRadius)
+        {
+            enemyMoveDirec = (cube.transform.position - Enemy.transform.position).normalized;
+            Debug.Log(enemyMoveDirec.magnitude);
+
+        }
+        Enemy.transform.position += enemyMoveDirec * Time.deltaTime;
+        enemyMoveDirec = Vector3.zero;
     }
 
     int countWASDBool()

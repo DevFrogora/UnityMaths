@@ -5,7 +5,7 @@ using UnityEditor;
 
 public class Enemy102 : MonoBehaviour
 {
-    public float detectionAngle = 90.0f;
+    public float detectionAngle = 360.0f;
     public float detectionRadius = 4;
     private void OnDrawGizmos()
     {
