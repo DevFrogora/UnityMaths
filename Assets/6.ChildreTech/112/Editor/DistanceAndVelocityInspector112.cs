@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-[CustomEditor(typeof(DistanceAndVelocity))]
+[CustomEditor(typeof(DistanceAndVelocity112))]
 [CanEditMultipleObjects]
-public class DistanceAndVelocityInspector : Editor
+public class DistanceAndVelocityInspector112 : Editor
 {
-    DistanceAndVelocity cube;
+    DistanceAndVelocity112 cube;
     Vector3 direction;
     bool showVelocity;
     bool sceneRepaintAll;
@@ -20,16 +20,20 @@ public class DistanceAndVelocityInspector : Editor
     public float leftForce = 0;
     public float forwardForce = 0;
 
-    Enemy102 enemyComponentScript;
+    Enemy112 enemyComponentScript;
     Vector3 enemyMoveDirec;
     Vector3 enemyToPlayerDistance;
 
     public GameObject Enemy;
+
+    bool showPlayerDetails;
+    bool showEnemyDetails;
+
     private void OnEnable()
     {
-        cube = (DistanceAndVelocity)target;
+        cube = (DistanceAndVelocity112)target;
         Enemy = GameObject.Find("Enemy");
-        enemyComponentScript = Enemy.GetComponent<Enemy102>();
+        enemyComponentScript = Enemy.GetComponent<Enemy112>();
     }
 
     public override void OnInspectorGUI()
@@ -48,7 +52,9 @@ public class DistanceAndVelocityInspector : Editor
         slideVelocity = EditorGUILayout.Slider("velocity ", slideVelocity, 0, 5);
         slideJumpForce = EditorGUILayout.Slider("jumpForce  ", slideJumpForce, 0, 20);
         sceneRepaintAll = EditorGUILayout.Toggle("SceneView Repaint ", sceneRepaintAll);
-        Enemy = (GameObject) EditorGUILayout.ObjectField("Enemy ", Enemy,  typeof(GameObject),true);
+        showPlayerDetails = EditorGUILayout.Toggle("Show Player Details ", showPlayerDetails);
+
+        Enemy = (GameObject)EditorGUILayout.ObjectField("Enemy ", Enemy, typeof(GameObject), true);
 
         //showVelocity = EditorGUILayout.Foldout(showVelocity, "Velocity direction");
         if (GUILayout.Button("Run Physics"))
@@ -168,21 +174,53 @@ public class DistanceAndVelocityInspector : Editor
         leftForce = 0;
         forwardForce = 0;
         jumpForce = 0;
-        Handles.Label(cube.transform.position + (2 * Vector3.one), "Velocity: " + velocity);
-        Handles.Label(Enemy.transform.position + (2 * Vector3.up), "Enemy ");
-        Handles.Label(cube.transform.position + (2 * new Vector3(1, 0, 1)), "Disatance: " + cube.transform.position.magnitude);
-        
-        
+        //Handles.Label(Enemy.transform.position + (2 * Vector3.up), "Enemy ");
+
+        if(showPlayerDetails)
+        {
+            Handles.Label(cube.transform.position + (2 * new Vector3(1, 0, 1)), "Distance: " + cube.transform.position.magnitude);
+            Handles.Label(cube.transform.position + (2 * Vector3.up) + (Vector3.right), "Velocity: " + velocity);
+        }
+
         cube.transform.position += direction * velocity * Time.deltaTime;
 
         enemyMoveDirec = Vector3.zero;
         enemyToPlayerDistance = cube.transform.position - Enemy.transform.position;
+        float rValue = Vector3.Dot(enemyToPlayerDistance.normalized,Enemy.transform.forward);
+        float rAngle = Vector3.Angle(enemyToPlayerDistance.normalized, Enemy.transform.forward);
+
+        //if (rValue == 1)
+        //{
+        //    Handles.Label(Enemy.transform.position + (2 * Vector3.up) + (Vector3.right), "Player in front " + rAngle);
+        //}
+        //else if (rValue == -1)
+        //{
+        //    Handles.Label(Enemy.transform.position + (2 * Vector3.up) + (Vector3.right), "Player in behind " + rAngle);
+        //}
+        //else
+        //{
+        //    Handles.Label(Enemy.transform.position + (2 * Vector3.up) + (Vector3.right), "value : " + rValue + " Angle : " + rAngle);
+        //}
+
+
+
+
         if (enemyToPlayerDistance.magnitude < enemyComponentScript.detectionRadius)
         {
-            enemyMoveDirec = ((cube.transform.position - Enemy.transform.position) -(2 * Vector3.forward)).normalized;
+            enemyMoveDirec = ((cube.transform.position - Enemy.transform.position) - (2 * Vector3.forward)).normalized;
             //Debug.Log(Enemy.transform.position + enemyMoveDirec);
             Handles.color = Color.yellow;
-            Handles.DrawLine(Enemy.transform.position,  (Enemy.transform.position + enemyToPlayerDistance)); // enemyToPlayerDistance is un normalized vector direction from enemy to player
+            Handles.DrawLine(Enemy.transform.position, (Enemy.transform.position + enemyToPlayerDistance)); // enemyToPlayerDistance is un normalized vector direction from enemy to player
+
+            if (rAngle < 90)
+            {
+                Handles.Label(Enemy.transform.position + (2 * Vector3.up) + (Vector3.right), "Player in front " + rAngle);
+            }
+            else
+            {
+                Handles.Label(Enemy.transform.position + (2 * Vector3.up) + (Vector3.right), "Player in behind " + rAngle);
+            }
+
 
         }
         Enemy.transform.position += enemyMoveDirec * Time.deltaTime;
@@ -202,5 +240,4 @@ public class DistanceAndVelocityInspector : Editor
         return count;
     }
 
-    
 }

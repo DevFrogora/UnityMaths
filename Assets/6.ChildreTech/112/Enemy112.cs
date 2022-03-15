@@ -2,8 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
-
-public class Enemy102 : MonoBehaviour
+public class Enemy112 : MonoBehaviour
 {
     public float detectionAngle = 360.0f;
     public float detectionRadius = 4;
@@ -16,7 +15,7 @@ public class Enemy102 : MonoBehaviour
     }
     private void OnDrawGizmos()
     {
-        Handles.color = new Color(0.8f,0,0,0.2f);
+        Handles.color = new Color(0.8f, 0, 0, 0.2f);
 
         Vector3 rotatedForward = Quaternion.Euler(
             0,
