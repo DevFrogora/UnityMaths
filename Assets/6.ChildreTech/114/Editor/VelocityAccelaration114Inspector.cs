@@ -131,9 +131,9 @@ public class VelocityAccelaration114Inspector : Editor
 
                         accelaration = cube.transform.forward * 0.1f;
                         velocity -= accelaration;
-                        if (velocity.z < slideVelocity)
+                        if (velocity.z < 0)
                         {
-                            velocity.z = slideVelocity;
+                            velocity.z = 0;
                         }
                     }
                     else
