@@ -70,6 +70,7 @@ public class VelocityAccelaration114Inspector : Editor
         Physics.Simulate(Time.fixedDeltaTime);
         Physics.autoSimulation = true;
     }
+    bool isLeftShiftUp;
 
     private void OnSceneGUI()
     {
@@ -117,8 +118,23 @@ public class VelocityAccelaration114Inspector : Editor
                     }
                     else if (Event.current.keyCode == (KeyCode.LeftShift))
                     {
-                        accelaration = cube.transform.forward * 0.5f;
+                        accelaration = cube.transform.forward * 0.1f;
                         velocity += accelaration;
+                        if(velocity.z > 4f)
+                        {
+                            velocity.z = 4f;
+                        }
+                        isLeftShiftUp = false;
+                    }
+                    else if (Event.current.keyCode == (KeyCode.Space))
+                    {
+
+                        accelaration = cube.transform.forward * 0.1f;
+                        velocity -= accelaration;
+                        if (velocity.z < slideVelocity)
+                        {
+                            velocity.z = slideVelocity;
+                        }
                     }
                     else
                     {
@@ -161,10 +177,23 @@ public class VelocityAccelaration114Inspector : Editor
                             velocity = Vector3.zero;
                         }
                     }
+                    else if (Event.current.keyCode == (KeyCode.LeftShift))
+                    {
+                        isLeftShiftUp = true;
+                    }
                     break;
                 }
         }
-
+        if(isLeftShiftUp)
+        {
+            accelaration = cube.transform.forward * 0.01f;
+            velocity -= accelaration;
+            if (velocity.z < slideVelocity)
+            {
+                velocity.z = slideVelocity;
+                isLeftShiftUp = false;
+            }
+        }
         //cube.rb.AddForce(new Vector3(leftForce, jumpForce, forwardForce), ForceMode.Impulse);
         //cube.transform.rotation *= Quaternion.Euler(new Vector3(0, YRotation, 0)); 
         cube.transform.rotation = Quaternion.Lerp(cube.transform.rotation, Quaternion.Euler(new Vector3(0, YRotation, 0)), Time.deltaTime); 
