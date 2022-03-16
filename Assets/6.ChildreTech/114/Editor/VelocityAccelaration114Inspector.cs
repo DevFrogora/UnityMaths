@@ -10,11 +10,15 @@ public class VelocityAccelaration114Inspector : Editor
     Vector3 direction;
     bool showVelocity;
     bool sceneRepaintAll;
-    float slideVelocity;
-    float velocity = 0;
+
     bool[] wasdBool = new bool[4];
 
-    public float slideJumpForce = 0;
+    public Vector3 velocity ;
+    public Vector3 accelaration;
+
+    float slideVelocity;
+    float slideAccelaration;
+
     public float jumpForce = 0;
     public float leftForce = 0;
     public float forwardForce = 0;
@@ -45,7 +49,7 @@ public class VelocityAccelaration114Inspector : Editor
             YRotation = 0;
         }
         slideVelocity = EditorGUILayout.Slider("velocity ", slideVelocity, 0, 5);
-        slideJumpForce = EditorGUILayout.Slider("jumpForce  ", slideJumpForce, 0, 20);
+        slideAccelaration = EditorGUILayout.Slider("Accelaration  ", slideAccelaration, 0, 20);
         sceneRepaintAll = EditorGUILayout.Toggle("SceneView Repaint ", sceneRepaintAll);
         showPlayerDetails = EditorGUILayout.Toggle("Show Player Details ", showPlayerDetails);
 
@@ -85,13 +89,13 @@ public class VelocityAccelaration114Inspector : Editor
                     if (Event.current.keyCode == (KeyCode.W))
                     {
                         direction = cube.transform.forward;
-                        velocity = slideVelocity;
+                        velocity = direction*slideVelocity;
                         wasdBool[0] = true;
                     }
                     else if (Event.current.keyCode == (KeyCode.A))
                     {
                         direction = -cube.transform.right;
-                        velocity = slideVelocity/2;
+                        velocity = (direction * slideVelocity)/2;
                         wasdBool[1] = true;
                         YRotation += -10;
 
@@ -100,26 +104,21 @@ public class VelocityAccelaration114Inspector : Editor
                     else if (Event.current.keyCode == (KeyCode.S))
                     {
                         direction = -cube.transform.forward;
-                        velocity = slideVelocity;
+                        velocity = direction * slideVelocity;
                         wasdBool[2] = true;
 
                     }
                     else if (Event.current.keyCode == (KeyCode.D))
                     {
                         direction = cube.transform.right;
-                        velocity = slideVelocity/2;
+                        velocity = (direction * slideVelocity) / 2;
                         wasdBool[3] = true;
                         YRotation += 10;
                     }
-                    else if (Event.current.keyCode == (KeyCode.Space))
+                    else if (Event.current.keyCode == (KeyCode.LeftShift))
                     {
-                        jumpForce = slideJumpForce;
-                        if (wasdBool[0]) forwardForce = 2;
-                        if (wasdBool[1]) leftForce = -2;
-                        if (wasdBool[2]) forwardForce = -2;
-                        if (wasdBool[3]) leftForce = 2;
-
-
+                        accelaration = cube.transform.forward * 0.5f;
+                        velocity += accelaration;
                     }
                     else
                     {
@@ -135,7 +134,7 @@ public class VelocityAccelaration114Inspector : Editor
                         wasdBool[0] = false;
                         if (countWASDBool() == 0)
                         {
-                            velocity = 0;
+                            velocity = Vector3.zero;
                         }
                     }
                     else if (Event.current.keyCode == (KeyCode.A))
@@ -143,7 +142,7 @@ public class VelocityAccelaration114Inspector : Editor
                         wasdBool[1] = false;
                         if (countWASDBool() == 0)
                         {
-                            velocity = 0;
+                            velocity = Vector3.zero;
                         }
                     }
                     else if (Event.current.keyCode == (KeyCode.S))
@@ -151,7 +150,7 @@ public class VelocityAccelaration114Inspector : Editor
                         wasdBool[2] = false;
                         if (countWASDBool() == 0)
                         {
-                            velocity = 0;
+                            velocity = Vector3.zero;
                         }
                     }
                     else if (Event.current.keyCode == (KeyCode.D))
@@ -159,7 +158,7 @@ public class VelocityAccelaration114Inspector : Editor
                         wasdBool[3] = false;
                         if (countWASDBool() == 0)
                         {
-                            velocity = 0;
+                            velocity = Vector3.zero;
                         }
                     }
                     break;
@@ -176,11 +175,11 @@ public class VelocityAccelaration114Inspector : Editor
 
         if (showPlayerDetails)
         {
-            Handles.Label(cube.transform.position + (2 * new Vector3(1, 0, 1)), "Distance: " + cube.transform.position.magnitude);
-            Handles.Label(cube.transform.position + (2 * Vector3.up) + (Vector3.right), "Velocity: " + velocity);
+            //Handles.Label(cube.transform.position + (2 * new Vector3(1, 0, 1)), "Distance: " + cube.transform.position.magnitude);
+            Handles.Label(cube.transform.position + (2 * Vector3.up) + (Vector3.right)*2, "Velocity: " + velocity);
         }
 
-        cube.transform.localPosition += direction * velocity * Time.deltaTime;
+        cube.transform.localPosition += velocity * Time.deltaTime;
 
    
     }
